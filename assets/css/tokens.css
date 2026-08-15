@@ -238,8 +238,12 @@ a {
   text-decoration: none;
 }
 
-ul[class],
-ol[class] {
+/* Wrapped in :where() so this weighs (0,0,0). Unwrapped, `ul[class], ol[class]`
+ * weighs (0,1,1) and outranks a component's own single-class rule (0,1,0), which
+ * silently dropped the padding of every list component that declared one. The
+ * match is unchanged — still only lists that carry a class — but now any
+ * component style beats it, while unstyled classed lists still get the reset. */
+:where(ul[class], ol[class]) {
   list-style: none;
   padding: 0;
 }

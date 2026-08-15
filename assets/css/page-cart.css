@@ -32,6 +32,7 @@
   align-items: center;
   gap: var(--s3) var(--s5);
   margin: var(--s6) 0 0;
+  /* Clears the top border off the step dots. */
   padding: var(--s4) 0 0;
   list-style: none;
   border-top: 1px solid var(--line);

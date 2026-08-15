@@ -348,11 +348,31 @@
   margin-top: var(--home-gap-md);
 }
 
+/* From 900px the head becomes two columns instead of one: the text keeps its
+ * 64ch measure in column one, the link rides the right edge of the content
+ * area in column two. The link is placed IN FLOW on purpose. It used to be
+ * absolutely positioned, but its containing block was `.section-head`, whose
+ * `max-width: 64ch` is far narrower than the container — so `right: 0` landed
+ * at the edge of the text column and `bottom: 0` level with the paragraph's
+ * last line, printing the button straight over the copy. */
 @media (min-width: 900px) {
+  .home-featured__head {
+    display: grid;
+    grid-template-columns: minmax(0, 64ch) 1fr;
+    column-gap: var(--home-gap-lg);
+    max-width: none;
+  }
+
+  .home-featured__head > .section-head__eyebrow,
+  .home-featured__head > .section-head__title,
+  .home-featured__head > .section-head__text {
+    grid-column: 1;
+  }
+
   .home-featured__all {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+    grid-column: 2;
+    justify-self: end;
+    align-self: end;
     margin-top: 0;
   }
 }
