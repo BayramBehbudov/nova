@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NOVA — Reference Audio for People Who Listen</title>
+  <meta name="description" content="NOVA builds reference-grade headphones, speakers and amplifiers. Hand-tuned drivers, honest measurements and free shipping over $500 across the range.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230a0b0f'/%3E%3Cpath%20d='M10%2023V9l12%2014V9'%20fill='none'%20stroke='%23c9a227'%20stroke-width='2.6'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/page-home.css">
+</head>
+<body class="has-fixed-header page-home">
+  <div class="noise" aria-hidden="true"></div>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header id="site-header"></header>
+
+  <main id="main">
+
+    <!-- 1. HERO -->
+    <section class="home-hero" id="home-hero" aria-labelledby="home-hero-title">
+      <div class="home-hero__layers" aria-hidden="true">
+        <div class="home-hero__glow home-hero__glow--a" data-parallax="0.42"></div>
+        <div class="home-hero__glow home-hero__glow--b" data-parallax="0.28"></div>
+        <div class="home-hero__grid" data-parallax="0.34"></div>
+        <div class="home-hero__art" id="home-hero-art" data-parallax="0.16"></div>
+        <div class="home-hero__drift" id="home-hero-drift"></div>
+      </div>
+
+      <div class="container home-hero__inner">
+        <!-- No [data-stagger] here: the children already carry their own
+             reveal delays, and the split headline must stay the sole owner
+             of its own animation. -->
+        <div class="home-hero__content" data-parallax="0.05">
+          <p class="tag home-hero__eyebrow" id="home-hero-eyebrow" data-reveal="up">New this season</p>
+          <h1 class="home-hero__title" id="home-hero-title" data-split="chars">Sound you can feel.</h1>
+          <p class="home-hero__lede" data-reveal="up" data-reveal-delay="0.12">
+            Reference headphones, speakers and amplifiers built around a single stubborn idea:
+            the recording already sounds right. Our job is to stay out of its way.
+          </p>
+          <div class="cluster home-hero__cta" data-reveal="up" data-reveal-delay="0.2">
+            <a class="btn btn--primary btn--lg" href="shop.html" data-magnetic>Shop the collection</a>
+            <button class="btn btn--ghost btn--lg" type="button" data-home-scroll="#home-engineered">
+              How it is engineered
+            </button>
+          </div>
+          <dl class="home-hero__meta" data-reveal="fade" data-reveal-delay="0.3">
+            <div class="home-hero__metaItem">
+              <dt class="u-dim">Warranty</dt>
+              <dd class="u-mono">Up to 5 years</dd>
+            </div>
+            <div class="home-hero__metaItem">
+              <dt class="u-dim">Free shipping</dt>
+              <dd class="u-mono">Over $500</dd>
+            </div>
+            <div class="home-hero__metaItem">
+              <dt class="u-dim">Returns</dt>
+              <dd class="u-mono">30 days</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <button class="home-hero__cue" type="button" data-home-scroll="#home-stats" aria-label="Scroll to the numbers behind NOVA">
+        <span class="home-hero__cueLabel">Scroll</span>
+        <span class="home-hero__cueLine" aria-hidden="true"></span>
+      </button>
+    </section>
+
+    <!-- 2. STATS -->
+    <section class="section section--tight home-stats" id="home-stats" aria-label="NOVA by the numbers">
+      <div class="container">
+        <div class="home-stats__grid" id="home-stats-grid" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 3. PARTNER MARQUEE -->
+    <section class="home-partners" aria-label="Studios and partners that use NOVA">
+      <div class="container">
+        <p class="home-partners__label u-dim" data-reveal="fade">Trusted in the rooms where records get finished</p>
+      </div>
+      <div class="marquee home-partners__marquee" data-marquee>
+        <div class="marquee__track" id="home-partners-track"></div>
+      </div>
+    </section>
+
+    <!-- 4. FEATURED COLLECTION -->
+    <section class="section home-featured" id="home-featured" aria-labelledby="home-featured-title">
+      <div class="container">
+        <div class="section-head home-featured__head">
+          <p class="section-head__eyebrow" data-reveal="up">Featured collection</p>
+          <h2 class="section-head__title" id="home-featured-title" data-split="lines">The four we would take home</h2>
+          <p class="section-head__text" data-reveal="up" data-reveal-delay="0.1">
+            Picked by the people who voice them. Every unit is measured on the same rig it was
+            tuned on, and the graph ships in the box.
+          </p>
+          <a class="btn btn--outline home-featured__all" href="shop.html" data-reveal="up" data-reveal-delay="0.16">
+            View all products
+          </a>
+        </div>
+        <div class="grid grid--4 home-featured__grid" id="home-featured-grid" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 5. CATEGORIES -->
+    <section class="section home-cats" id="home-categories" aria-labelledby="home-cats-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-head__eyebrow" data-reveal="up">Browse by room</p>
+          <h2 class="section-head__title" id="home-cats-title" data-split="lines">Six ways to listen properly</h2>
+          <p class="section-head__text" data-reveal="up" data-reveal-delay="0.1">
+            From a desk at midnight to a room with the doors closed — start where you actually listen.
+          </p>
+        </div>
+        <div class="grid grid--3 home-cats__grid" id="home-cats-grid" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 6. EDITORIAL — ENGINEERED -->
+    <section class="home-eng" id="home-engineered" aria-labelledby="home-eng-title">
+      <div class="home-eng__bg" aria-hidden="true" data-parallax="0.38"></div>
+      <div class="container home-eng__inner">
+        <div class="home-eng__media">
+          <div class="home-eng__sticky">
+            <div class="home-eng__art" id="home-eng-art" data-parallax="0.12"></div>
+            <p class="home-eng__caption u-mono u-dim" id="home-eng-caption"></p>
+          </div>
+        </div>
+        <div class="home-eng__copy">
+          <div class="section-head home-eng__head">
+            <p class="section-head__eyebrow" data-reveal="up">Engineered, not styled</p>
+            <h2 class="section-head__title" id="home-eng-title" data-split="lines">Four decisions you can hear</h2>
+            <p class="section-head__text" id="home-eng-story" data-reveal="up" data-reveal-delay="0.1"></p>
+          </div>
+          <ol class="home-eng__steps">
+            <li class="home-eng__step" data-reveal="up">
+              <span class="home-eng__num u-mono" aria-hidden="true">01</span>
+              <h3 class="home-eng__stepTitle">One driver, milled from a single billet</h3>
+              <p class="home-eng__stepText">
+                The motor housing is cut from one piece of aluminium rather than glued from three.
+                Nothing rings, nothing loosens, and the midrange stays where we put it after a
+                decade of daily use.
+              </p>
+            </li>
+            <li class="home-eng__step" data-reveal="up" data-reveal-delay="0.08">
+              <span class="home-eng__num u-mono" aria-hidden="true">02</span>
+              <h3 class="home-eng__stepTitle">Tuned by ear, then proved on the rig</h3>
+              <p class="home-eng__stepText">
+                Every voicing starts with the same engineers and the same reference playlist they
+                have argued over since the print works in 2016. Only once they agree does the
+                measurement rig get to confirm it — never the other way around.
+              </p>
+            </li>
+            <li class="home-eng__step" data-reveal="up" data-reveal-delay="0.16">
+              <span class="home-eng__num u-mono" aria-hidden="true">03</span>
+              <h3 class="home-eng__stepTitle">A chassis that refuses to join in</h3>
+              <p class="home-eng__stepText">
+                Damping is layered, not sprayed: a constrained viscoelastic core between two
+                machined shells drops cabinet resonance below the noise floor of the room you are
+                sitting in.
+              </p>
+            </li>
+            <li class="home-eng__step" data-reveal="up" data-reveal-delay="0.24">
+              <span class="home-eng__num u-mono" aria-hidden="true">04</span>
+              <h3 class="home-eng__stepTitle">Serviceable down to the last screw</h3>
+              <p class="home-eng__stepText">
+                Pads, cables, drivers and boards are all replaceable with a single hex key. Parts
+                stay stocked in Lisbon for ten years after a product leaves the catalogue, because
+                the alternative is landfill with a nice finish.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. BESTSELLERS -->
+    <section class="section home-best" id="home-bestsellers" aria-labelledby="home-best-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-head__eyebrow" data-reveal="up">Most reviewed</p>
+          <h2 class="section-head__title" id="home-best-title" data-split="lines">What everyone else kept</h2>
+          <p class="section-head__text" data-reveal="up" data-reveal-delay="0.1">
+            Ranked by verified review count, not by margin. Swipe on a phone, scan on a desk.
+          </p>
+        </div>
+      </div>
+      <div class="home-best__rail">
+        <div class="container home-best__track" id="home-best-track" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 8. TESTIMONIALS -->
+    <section class="section home-voices" id="home-voices" aria-labelledby="home-voices-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-head__eyebrow" data-reveal="up">Owners</p>
+          <h2 class="section-head__title" id="home-voices-title" data-split="lines">Six rooms, one verdict</h2>
+        </div>
+        <blockquote class="home-voices__pull quote" data-reveal="up" id="home-voices-pull"></blockquote>
+        <div class="grid grid--3 home-voices__grid" id="home-voices-grid" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 9. JOURNAL -->
+    <section class="section home-journal" id="home-journal" aria-labelledby="home-journal-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="section-head__eyebrow" data-reveal="up">The Journal</p>
+          <h2 class="section-head__title" id="home-journal-title" data-split="lines">Notes from the listening room</h2>
+          <p class="section-head__text" data-reveal="up" data-reveal-delay="0.1">
+            Longer reads on measurement, materials and why your room matters more than your amplifier.
+          </p>
+        </div>
+        <div class="grid grid--3 home-journal__grid" id="home-journal-grid" data-stagger></div>
+      </div>
+    </section>
+
+    <!-- 10. FAQ -->
+    <section class="section home-faq" id="home-faq" aria-labelledby="home-faq-title">
+      <div class="container home-faq__inner">
+        <div class="section-head home-faq__head">
+          <p class="section-head__eyebrow" data-reveal="up">Before you ask</p>
+          <h2 class="section-head__title" id="home-faq-title" data-split="lines">Questions we get every week</h2>
+        </div>
+        <div class="accordion home-faq__list" id="home-faq-list"></div>
+      </div>
+    </section>
+
+    <!-- 11. NEWSLETTER -->
+    <section class="section home-news" id="home-newsletter" aria-labelledby="home-news-title">
+      <div class="home-news__glow" aria-hidden="true" data-parallax="0.3"></div>
+      <div class="home-news__glow home-news__glow--b" aria-hidden="true" data-parallax="0.18"></div>
+      <div class="container home-news__inner">
+        <div class="home-news__copy">
+          <p class="section-head__eyebrow" data-reveal="up">One letter a month</p>
+          <h2 class="section-head__title" id="home-news-title" data-split="lines">Hear the next one first</h2>
+          <p class="section-head__text" data-reveal="up" data-reveal-delay="0.1">
+            Launch dates, measurement write-ups and the occasional factory photograph. No offers you
+            did not ask for, and one click to leave.
+          </p>
+        </div>
+        <form class="home-news__form" id="home-news-form" novalidate data-reveal="up" data-reveal-delay="0.16">
+          <div class="field home-news__field" id="home-news-field">
+            <label class="sr-only" for="home-news-email">Email address</label>
+            <input class="field__input" id="home-news-email" name="email" type="email"
+                   inputmode="email" autocomplete="email" placeholder="you@studio.com"
+                   aria-describedby="home-news-error">
+            <p class="field__error" id="home-news-error" role="alert"></p>
+          </div>
+          <button class="btn btn--primary btn--lg" type="submit" id="home-news-submit">Join the list</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/SplitText.min.js"></script>
+  <script src="assets/vendor/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/page-home.js"></script>
+</body>
+</html>

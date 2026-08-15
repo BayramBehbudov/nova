@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your cart — NOVA</title>
+  <meta name="description" content="Review your NOVA cart, apply a promo code, pick a delivery speed and check out in three quick steps. Free shipping over $500, whichever speed you pick.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230a0b0f'/%3E%3Cpath%20d='M10%2023V9l12%2014V9'%20fill='none'%20stroke='%23c9a227'%20stroke-width='2.6'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/page-cart.css">
+</head>
+<body class="has-fixed-header page-cart">
+  <div class="noise" aria-hidden="true"></div>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header id="site-header"></header>
+
+  <main id="main">
+
+    <!-- ==== PAGE HEAD + STEP INDICATOR ============================== -->
+    <section class="section section--tight cart-head">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a class="breadcrumbs__link" href="index.html">Home</a>
+          <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+          <a class="breadcrumbs__link" href="shop.html">Shop</a>
+          <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+          <span aria-current="page">Checkout</span>
+        </nav>
+
+        <h1 class="cart-head__title" data-reveal="up">Checkout</h1>
+        <p class="cart-head__lead u-muted" data-reveal="up" data-reveal-delay="0.08">
+          Three steps, no surprises. Every price below includes tax at 8% and shows the delivery cost before you commit.
+        </p>
+
+        <ol class="cart-steps" id="cart-steps" aria-label="Checkout progress">
+          <li class="cart-steps__item is-active" data-step="cart">
+            <span class="cart-steps__dot" aria-hidden="true">1</span>
+            <span class="cart-steps__label">Cart</span>
+          </li>
+          <li class="cart-steps__item" data-step="details">
+            <span class="cart-steps__dot" aria-hidden="true">2</span>
+            <span class="cart-steps__label">Details</span>
+          </li>
+          <li class="cart-steps__item" data-step="done">
+            <span class="cart-steps__dot" aria-hidden="true">3</span>
+            <span class="cart-steps__label">Done</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ==== STEP 1 — CART ========================================== -->
+    <section class="section section--tight cart-step is-active" id="step-cart" data-step="cart" aria-labelledby="step-cart-title">
+      <div class="container">
+        <h2 class="sr-only" id="step-cart-title" tabindex="-1">Step 1 of 3 — your cart</h2>
+
+        <div class="cart-layout">
+          <div class="cart-main">
+
+            <div class="cart-lines" id="cart-lines" data-reveal="up"></div>
+
+            <div class="cart-panel cart-free" id="cart-free" data-reveal="up">
+              <p class="cart-free__label" id="cart-free-label">Free shipping progress</p>
+              <div class="progress" id="cart-free-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progress towards free shipping">
+                <div class="progress__bar" id="cart-free-bar"></div>
+              </div>
+            </div>
+
+            <div class="cart-panel cart-promo" data-reveal="up">
+              <h3 class="cart-panel__title">Promo code</h3>
+              <form class="cart-promo__form" id="promo-form" novalidate>
+                <div class="field" data-field="promo">
+                  <label class="field__label" for="promo-input">Enter a code</label>
+                  <div class="field__control">
+                    <input class="field__input u-mono" id="promo-input" name="promo" type="text" autocomplete="off" spellcheck="false" placeholder="NOVA10">
+                  </div>
+                  <p class="field__error" data-error-for="promo" role="alert"></p>
+                </div>
+                <button class="btn btn--outline" type="submit" id="promo-apply">Apply</button>
+              </form>
+              <div class="cart-promo__applied" id="promo-applied" hidden></div>
+              <p class="cart-promo__hint-label u-dim">Demo codes you can try:</p>
+              <div class="cart-promo__hints" id="promo-hints"></div>
+            </div>
+
+            <div class="cart-panel cart-ship" data-reveal="up">
+              <h3 class="cart-panel__title">Delivery</h3>
+              <div class="cart-ship__list" id="cart-ship-list" role="radiogroup" aria-label="Delivery method"></div>
+            </div>
+
+          </div>
+
+          <aside class="cart-aside" aria-label="Order summary">
+            <div class="cart-summary" id="summary-cart" data-reveal="up"></div>
+          </aside>
+        </div>
+
+        <div class="cart-reco" id="cart-reco" hidden>
+          <div class="section-head">
+            <p class="section-head__eyebrow">Pairs well</p>
+            <h2 class="section-head__title">You might also like</h2>
+          </div>
+          <div class="grid grid--4" id="cart-reco-grid" data-stagger="0.06"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==== STEP 2 — DETAILS ======================================= -->
+    <section class="section section--tight cart-step" id="step-details" data-step="details" aria-labelledby="step-details-title">
+      <div class="container">
+        <h2 class="cart-section-title" id="step-details-title" tabindex="-1" data-step-in>Delivery and payment details</h2>
+
+        <div class="cart-layout">
+          <div class="cart-main" data-step-in>
+
+            <p class="cart-alert" id="cart-alert" role="alert" hidden></p>
+
+            <form class="cart-form" id="checkout-form" novalidate autocomplete="on">
+
+              <fieldset class="cart-form__block">
+                <legend class="cart-panel__title">Who is this order for?</legend>
+                <div class="cart-form__grid">
+                  <div class="field" data-field="fullName">
+                    <label class="field__label" for="f-name">Full name</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-name" name="fullName" type="text" autocomplete="name" placeholder="Ada Lovelace">
+                    </div>
+                    <p class="field__error" data-error-for="fullName" role="alert"></p>
+                  </div>
+
+                  <div class="field" data-field="email">
+                    <label class="field__label" for="f-email">Email</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+                    </div>
+                    <p class="field__hint">Your order confirmation and tracking link go here.</p>
+                    <p class="field__error" data-error-for="email" role="alert"></p>
+                  </div>
+
+                  <div class="field" data-field="phone">
+                    <label class="field__label" for="f-phone">Phone</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 555 0134">
+                    </div>
+                    <p class="field__hint">The courier calls this number before delivery.</p>
+                    <p class="field__error" data-error-for="phone" role="alert"></p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="cart-form__block">
+                <legend class="cart-panel__title">Where should it go?</legend>
+                <div class="cart-form__grid">
+                  <div class="field" data-field="country">
+                    <label class="field__label" for="f-country">Country</label>
+                    <div class="field__control">
+                      <select class="field__select" id="f-country" name="country" autocomplete="country-name">
+                        <option value="" selected>Choose a country</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Belgium">Belgium</option>
+                        <option value="Brazil">Brazil</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Denmark">Denmark</option>
+                        <option value="Finland">Finland</option>
+                        <option value="France">France</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Ireland">Ireland</option>
+                        <option value="Italy">Italy</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Mexico">Mexico</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="New Zealand">New Zealand</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Poland">Poland</option>
+                        <option value="Portugal">Portugal</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Spain">Spain</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United States">United States</option>
+                      </select>
+                    </div>
+                    <p class="field__error" data-error-for="country" role="alert"></p>
+                  </div>
+
+                  <div class="field" data-field="city">
+                    <label class="field__label" for="f-city">City</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-city" name="city" type="text" autocomplete="address-level2" placeholder="Lisbon">
+                    </div>
+                    <p class="field__error" data-error-for="city" role="alert"></p>
+                  </div>
+
+                  <div class="field cart-form__full" data-field="address">
+                    <label class="field__label" for="f-address">Street address</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-address" name="address" type="text" autocomplete="street-address" placeholder="Rua da Prata 118, 3rd floor">
+                    </div>
+                    <p class="field__error" data-error-for="address" role="alert"></p>
+                  </div>
+
+                  <div class="field" data-field="zip">
+                    <label class="field__label" for="f-zip">Postal code</label>
+                    <div class="field__control">
+                      <input class="field__input" id="f-zip" name="zip" type="text" autocomplete="postal-code" placeholder="1100-052">
+                    </div>
+                    <p class="field__error" data-error-for="zip" role="alert"></p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="cart-form__block field cart-pay" data-field="method">
+                <legend class="cart-panel__title">How would you like to pay?</legend>
+                <div class="cart-pay__list">
+                  <label class="radio-card is-active">
+                    <input type="radio" name="method" value="card" checked>
+                    <span class="radio-card__title">Card</span>
+                    <span class="radio-card__meta">Visa, Mastercard, American Express</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="method" value="paypal">
+                    <span class="radio-card__title">PayPal</span>
+                    <span class="radio-card__meta">Approve in your PayPal account</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="method" value="cod">
+                    <span class="radio-card__title">Cash on delivery</span>
+                    <span class="radio-card__meta">Pay the courier at your door</span>
+                  </label>
+                </div>
+                <p class="cart-pay__note" id="pay-note"></p>
+                <p class="field__error" data-error-for="method" role="alert"></p>
+              </fieldset>
+
+              <fieldset class="cart-form__block">
+                <legend class="cart-panel__title">Anything we should know?</legend>
+                <div class="field" data-field="note">
+                  <label class="field__label" for="f-note">Order note <span class="u-dim">(optional)</span></label>
+                  <div class="field__control">
+                    <textarea class="field__textarea" id="f-note" name="note" rows="3" placeholder="Buzzer is broken — please call on arrival."></textarea>
+                  </div>
+                  <p class="field__hint">Delivery instructions, a gift message, or a quieter time to knock.</p>
+                </div>
+
+                <div class="field cart-form__terms" data-field="terms">
+                  <label class="checkbox">
+                    <input type="checkbox" name="terms" id="f-terms">
+                    <span class="checkbox__box" aria-hidden="true"></span>
+                    <span>I agree to the NOVA terms of sale, the 30-day return policy and the privacy notice.</span>
+                  </label>
+                  <p class="field__error" data-error-for="terms" role="alert"></p>
+                </div>
+              </fieldset>
+
+              <div class="cart-form__actions">
+                <button class="btn btn--ghost" type="button" id="back-to-cart">Back to cart</button>
+                <button class="btn btn--primary btn--lg" type="submit" id="place-order">Place order</button>
+              </div>
+            </form>
+          </div>
+
+          <aside class="cart-aside" aria-label="Order summary" data-step-in>
+            <div class="cart-recap is-collapsed" id="recap-wrap">
+              <button class="cart-recap__toggle" type="button" id="recap-toggle" aria-expanded="false" aria-controls="summary-details">
+                <span>Order summary</span>
+                <span class="cart-recap__amount" data-total="total">&mdash;</span>
+              </button>
+              <div class="cart-summary" id="summary-details"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==== STEP 3 — CONFIRMATION ================================== -->
+    <section class="section section--tight cart-step" id="step-done" data-step="done" aria-labelledby="step-done-title">
+      <div class="container">
+        <div class="cart-done" id="cart-done">
+          <div class="cart-done__stage">
+            <div class="cart-done__burst" id="done-burst" aria-hidden="true"></div>
+            <div class="cart-done__badge" id="done-badge" aria-hidden="true">
+              <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 25l9 9 15-19"></path>
+              </svg>
+            </div>
+          </div>
+          <h2 class="cart-done__title" id="step-done-title" tabindex="-1">Order confirmed</h2>
+          <div id="done-body"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/SplitText.min.js"></script>
+  <script src="assets/vendor/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/page-cart.js"></script>
+</body>
+</html>

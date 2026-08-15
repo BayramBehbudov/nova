@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product — NOVA</title>
+  <meta name="description" content="Full detail on a NOVA audio product: gallery, colour options, specifications, verified owner reviews, delivery estimates and the gear that pairs with it.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E0E13'/%3E%3Cpath d='M9 23V9h3.2l7.6 9.1V9H23v14h-3.2l-7.6-9.1V23z' fill='%23E9A54B'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/page-product.css">
+</head>
+<body class="has-fixed-header page-product">
+  <div class="noise" aria-hidden="true"></div>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header id="site-header"></header>
+
+  <main id="main">
+
+    <!-- ===================================================================
+         NOT FOUND — shown by page-product.js when ?id= is missing or unknown
+         =================================================================== -->
+    <section class="section pdp-missing" id="pdp-missing" hidden>
+      <div class="container">
+        <div class="empty-state">
+          <span class="empty-state__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-3.6-3.6M8.6 8.6l4.8 4.8"></path>
+            </svg>
+          </span>
+          <h1>We couldn&rsquo;t find that product</h1>
+          <p>The link you followed points at an item that is no longer in the catalogue, or the address lost its product code along the way.</p>
+          <a class="btn btn--primary" href="shop.html">Browse the shop</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PRODUCT — every mount point below is filled by page-product.js
+         =================================================================== -->
+    <div id="pdp-product" hidden>
+
+      <!-- Gallery + buy box ------------------------------------------- -->
+      <section class="section section--tight pdp-top">
+        <div class="container">
+          <nav aria-label="Breadcrumb">
+            <ol class="breadcrumbs" id="pdp-crumbs"></ol>
+          </nav>
+
+          <div class="pdp-layout">
+            <div class="pdp-gallery" data-reveal="left">
+              <div id="pdp-gallery"></div>
+            </div>
+
+            <div class="pdp-buybox" data-reveal="right" data-reveal-delay="0.08">
+              <div id="pdp-buybox"></div>
+
+              <ul class="trust pdp-trust">
+                <li class="trust__item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3l7 3v5.5c0 4.2-2.9 8.1-7 9.5-4.1-1.4-7-5.3-7-9.5V6z"></path>
+                    <path d="M9.2 12.2l2 2 3.6-3.9"></path>
+                  </svg>
+                  <span><strong>2-year warranty</strong>Extendable to 5 years</span>
+                </li>
+                <li class="trust__item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 8.5A8 8 0 0 1 19.5 10"></path>
+                    <path d="M20 15.5A8 8 0 0 1 4.5 14"></path>
+                    <path d="M4 4.5v4h4M20 19.5v-4h-4"></path>
+                  </svg>
+                  <span><strong>30-day returns</strong>Unworn, we pay the label</span>
+                </li>
+                <li class="trust__item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                    <path d="M8 10V7.5a4 4 0 0 1 8 0V10"></path>
+                  </svg>
+                  <span><strong>Secure checkout</strong>Card, PayPal or on delivery</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature strip ----------------------------------------------- -->
+      <section class="section section--tight pdp-featureband" id="pdp-featureband">
+        <div class="pdp-featureband__glow" data-parallax="0.22" aria-hidden="true"></div>
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__eyebrow">Built in</p>
+            <h2 class="section-head__title" id="pdp-features-title"></h2>
+          </div>
+          <ol class="pdp-features" id="pdp-features" data-stagger></ol>
+        </div>
+      </section>
+
+      <!-- Tabs --------------------------------------------------------- -->
+      <section class="section section--tight" id="pdp-detail">
+        <div class="container">
+          <div class="tabs" role="tablist" aria-label="Product detail" id="pdp-tablist">
+            <button type="button" class="tab is-active" role="tab" id="pdp-tab-description"
+                    aria-controls="pdp-panel-description" aria-selected="true" data-tab="description">Description</button>
+            <button type="button" class="tab" role="tab" id="pdp-tab-specs" tabindex="-1"
+                    aria-controls="pdp-panel-specs" aria-selected="false" data-tab="specs">Specifications</button>
+            <button type="button" class="tab" role="tab" id="pdp-tab-reviews" tabindex="-1"
+                    aria-controls="pdp-panel-reviews" aria-selected="false" data-tab="reviews">Reviews</button>
+            <button type="button" class="tab" role="tab" id="pdp-tab-shipping" tabindex="-1"
+                    aria-controls="pdp-panel-shipping" aria-selected="false" data-tab="shipping">Shipping &amp; Returns</button>
+          </div>
+
+          <div class="tabpanel pdp-panel" role="tabpanel" id="pdp-panel-description"
+               aria-labelledby="pdp-tab-description" tabindex="0">
+            <div class="pdp-prose" id="pdp-description"></div>
+          </div>
+
+          <div class="tabpanel pdp-panel" role="tabpanel" id="pdp-panel-specs"
+               aria-labelledby="pdp-tab-specs" tabindex="0" hidden>
+            <dl class="pdp-specs" id="pdp-specs"></dl>
+          </div>
+
+          <div class="tabpanel pdp-panel" role="tabpanel" id="pdp-panel-reviews"
+               aria-labelledby="pdp-tab-reviews" tabindex="0" hidden>
+            <div class="pdp-reviews">
+              <aside class="pdp-summary" id="pdp-review-summary"></aside>
+
+              <div class="pdp-reviews__main">
+                <ol class="pdp-review-list" id="pdp-review-list"></ol>
+
+                <form class="pdp-form" id="pdp-review-form" novalidate>
+                  <h3 class="pdp-form__title">Write a review</h3>
+                  <p class="u-muted pdp-form__note">Demo form: what you post appears in this list for the current visit only and is never sent or saved.</p>
+
+                  <fieldset class="pdp-rate" id="pdp-rate">
+                    <legend class="field__label">Your rating</legend>
+                    <div class="pdp-rate__stars">
+                      <input class="sr-only" type="radio" name="pdp-rating" id="pdp-rate-5" value="5">
+                      <label class="pdp-rate__star" for="pdp-rate-5" title="5 stars"><span class="sr-only">5 stars</span></label>
+                      <input class="sr-only" type="radio" name="pdp-rating" id="pdp-rate-4" value="4">
+                      <label class="pdp-rate__star" for="pdp-rate-4" title="4 stars"><span class="sr-only">4 stars</span></label>
+                      <input class="sr-only" type="radio" name="pdp-rating" id="pdp-rate-3" value="3">
+                      <label class="pdp-rate__star" for="pdp-rate-3" title="3 stars"><span class="sr-only">3 stars</span></label>
+                      <input class="sr-only" type="radio" name="pdp-rating" id="pdp-rate-2" value="2">
+                      <label class="pdp-rate__star" for="pdp-rate-2" title="2 stars"><span class="sr-only">2 stars</span></label>
+                      <input class="sr-only" type="radio" name="pdp-rating" id="pdp-rate-1" value="1">
+                      <label class="pdp-rate__star" for="pdp-rate-1" title="1 star"><span class="sr-only">1 star</span></label>
+                    </div>
+                    <p class="field__error pdp-error" id="pdp-err-rating" hidden></p>
+                  </fieldset>
+
+                  <div class="pdp-form__row">
+                    <div class="field" id="pdp-field-name">
+                      <label class="field__label" for="pdp-review-name">Your name</label>
+                      <div class="field__control">
+                        <input class="field__input" type="text" id="pdp-review-name" name="name"
+                               autocomplete="name" maxlength="60" aria-describedby="pdp-err-name">
+                      </div>
+                      <p class="field__error pdp-error" id="pdp-err-name" hidden></p>
+                    </div>
+
+                    <div class="field" id="pdp-field-title">
+                      <label class="field__label" for="pdp-review-title">Headline <span class="u-muted">(optional)</span></label>
+                      <div class="field__control">
+                        <input class="field__input" type="text" id="pdp-review-title" name="title" maxlength="80">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="field" id="pdp-field-body">
+                    <label class="field__label" for="pdp-review-body">Your review</label>
+                    <div class="field__control">
+                      <textarea class="field__textarea" id="pdp-review-body" name="body" rows="4"
+                                maxlength="900" aria-describedby="pdp-err-body"></textarea>
+                    </div>
+                    <p class="field__hint">At least 20 characters — tell people how it sounds and how it wears.</p>
+                    <p class="field__error pdp-error" id="pdp-err-body" hidden></p>
+                  </div>
+
+                  <button type="submit" class="btn btn--outline">Post review</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabpanel pdp-panel" role="tabpanel" id="pdp-panel-shipping"
+               aria-labelledby="pdp-tab-shipping" tabindex="0" hidden>
+            <div class="pdp-shipping">
+              <div>
+                <h3 class="pdp-shipping__title">Delivery options</h3>
+                <ul class="pdp-methods" id="pdp-methods"></ul>
+                <p class="pdp-freeship" id="pdp-freeship"></p>
+              </div>
+              <div class="pdp-prose">
+                <h3 class="pdp-shipping__title">Returns</h3>
+                <p>You have 30 days from delivery to change your mind. Send it back complete and unworn — pads, cables, stylus guards and the box — and we refund the full price to the original payment method within five working days of it reaching Lisbon.</p>
+                <p>Return shipping is on us for anything faulty or wrongly described. For a straightforward change of heart we deduct the carrier cost from the refund and tell you the exact figure before you book the collection.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Related ------------------------------------------------------ -->
+      <section class="section section--tight" id="pdp-related-section">
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__eyebrow">Pairs with</p>
+            <h2 class="section-head__title">You may also like</h2>
+          </div>
+          <div class="grid grid--4" id="pdp-related" data-stagger></div>
+        </div>
+      </section>
+
+      <!-- Recently viewed ---------------------------------------------- -->
+      <section class="section section--tight" id="pdp-recent-section" hidden>
+        <div class="container">
+          <div class="section-head">
+            <p class="section-head__eyebrow">Your trail</p>
+            <h2 class="section-head__title">Recently viewed</h2>
+          </div>
+          <div class="grid grid--4" id="pdp-recent" data-stagger></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/SplitText.min.js"></script>
+  <script src="assets/vendor/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/page-product.js"></script>
+</body>
+</html>

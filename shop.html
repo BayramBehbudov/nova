@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop — NOVA</title>
+  <meta name="description" content="Browse the complete NOVA catalogue of premium headphones, speakers and audio gear. Filter by category, price, rating and colour, then sort your way.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E0E13'/%3E%3Cpath d='M10 23V9l12 14V9' fill='none' stroke='%23E9A54B' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/page-shop.css">
+</head>
+<body class="has-fixed-header page-shop">
+  <div class="noise" aria-hidden="true"></div>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header id="site-header"></header>
+
+  <main id="main">
+
+    <!-- ==================================================================
+         BANNER
+         ================================================================== -->
+    <section class="shop-banner">
+      <div class="shop-banner__field" aria-hidden="true">
+        <span class="shop-banner__orb shop-banner__orb--a" data-parallax="0.22"></span>
+        <span class="shop-banner__orb shop-banner__orb--b" data-parallax="0.12"></span>
+        <span class="shop-banner__rule"></span>
+      </div>
+
+      <div class="container shop-banner__inner">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a class="breadcrumbs__link" href="index.html">Home</a>
+          <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+          <span class="shop-crumb" id="shop-crumb"><span aria-current="page">Shop</span></span>
+        </nav>
+
+        <h1 class="shop-banner__title" id="shop-title" data-split="chars">All products</h1>
+
+        <p class="shop-banner__sub u-muted" id="shop-subtitle" data-reveal="up" data-reveal-delay="0.12">
+          Twenty-four hand-picked pieces of listening equipment. Filter, sort and compare until one of them is obviously yours.
+        </p>
+
+        <p class="shop-banner__meta" data-reveal="up" data-reveal-delay="0.2">
+          <!-- No [data-counter] here: motion.js animates that hook to a fixed
+               attribute target and rewrites the text, which would fight this
+               live, filter-driven result count. -->
+          <span class="shop-banner__num u-mono" id="shop-banner-count">0</span>
+          <span class="u-muted" id="shop-banner-noun">products match right now</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         CATALOGUE
+         ================================================================== -->
+    <section class="section section--tight shop-main">
+      <div class="container">
+        <div class="shop-layout">
+
+          <!-- ---------- Filter rail (slide-over panel under 1024px) ----- -->
+          <div class="shop-scrim" id="shop-scrim" hidden></div>
+
+          <aside class="shop-rail" id="shop-rail" aria-label="Product filters">
+            <div class="shop-rail__head">
+              <h2 class="shop-rail__heading">Filters</h2>
+              <button class="shop-rail__close" type="button" id="shop-rail-close" aria-label="Close filters">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+            </div>
+
+            <div class="shop-rail__body">
+
+              <section class="shop-facet">
+                <label class="field shop-search">
+                  <span class="field__label">Search</span>
+                  <input class="field__input" type="search" id="shop-q" name="q" placeholder="Name, brand, category…" autocomplete="off" maxlength="60">
+                </label>
+              </section>
+
+              <section class="shop-facet" aria-labelledby="shop-facet-cat">
+                <h3 class="shop-facet__title" id="shop-facet-cat">Category</h3>
+                <div class="shop-facet__body" id="shop-cats"></div>
+              </section>
+
+              <section class="shop-facet" aria-labelledby="shop-facet-price">
+                <h3 class="shop-facet__title" id="shop-facet-price">Price</h3>
+                <p class="shop-range__label u-mono" id="shop-price-label" aria-live="polite">$0 – $0</p>
+                <div class="shop-range" id="shop-range">
+                  <span class="shop-range__track" aria-hidden="true"></span>
+                  <span class="shop-range__fill" id="shop-range-fill" aria-hidden="true"></span>
+                  <input class="shop-range__input shop-range__input--min" type="range" id="shop-price-min" aria-label="Minimum price">
+                  <input class="shop-range__input shop-range__input--max" type="range" id="shop-price-max" aria-label="Maximum price">
+                </div>
+                <div class="shop-range__ends u-mono u-dim">
+                  <span id="shop-price-floor">$0</span>
+                  <span id="shop-price-ceil">$0</span>
+                </div>
+              </section>
+
+              <section class="shop-facet" aria-labelledby="shop-facet-rating">
+                <h3 class="shop-facet__title" id="shop-facet-rating">Rating</h3>
+                <div class="shop-facet__body" role="radiogroup" aria-labelledby="shop-facet-rating">
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="radio" name="shop-rating" value="4.5">
+                    <span class="shop-opt__box shop-opt__box--radio" aria-hidden="true"></span>
+                    <span class="shop-opt__text">4.5 &amp; up</span>
+                  </label>
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="radio" name="shop-rating" value="4">
+                    <span class="shop-opt__box shop-opt__box--radio" aria-hidden="true"></span>
+                    <span class="shop-opt__text">4.0 &amp; up</span>
+                  </label>
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="radio" name="shop-rating" value="3.5">
+                    <span class="shop-opt__box shop-opt__box--radio" aria-hidden="true"></span>
+                    <span class="shop-opt__text">3.5 &amp; up</span>
+                  </label>
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="radio" name="shop-rating" value="0" checked>
+                    <span class="shop-opt__box shop-opt__box--radio" aria-hidden="true"></span>
+                    <span class="shop-opt__text">Any rating</span>
+                  </label>
+                </div>
+              </section>
+
+              <section class="shop-facet" aria-labelledby="shop-facet-colour">
+                <h3 class="shop-facet__title" id="shop-facet-colour">Colour</h3>
+                <div class="shop-swatches" id="shop-colors"></div>
+              </section>
+
+              <section class="shop-facet" aria-labelledby="shop-facet-avail">
+                <h3 class="shop-facet__title" id="shop-facet-avail">Availability</h3>
+                <div class="shop-facet__body">
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="checkbox" id="shop-stock">
+                    <span class="shop-opt__box" aria-hidden="true"></span>
+                    <span class="shop-opt__text">In stock only</span>
+                  </label>
+                  <label class="shop-opt">
+                    <input class="shop-opt__input" type="checkbox" id="shop-sale">
+                    <span class="shop-opt__box" aria-hidden="true"></span>
+                    <span class="shop-opt__text">On sale only</span>
+                  </label>
+                </div>
+              </section>
+
+              <button class="btn btn--ghost btn--sm btn--block shop-rail__clear" type="button" id="shop-clear" disabled>
+                Clear all
+              </button>
+            </div>
+
+            <div class="shop-rail__foot">
+              <button class="btn btn--primary btn--block" type="button" id="shop-rail-apply">
+                Show <span id="shop-apply-count">0</span> products
+              </button>
+            </div>
+          </aside>
+
+          <!-- ---------- Results column --------------------------------- -->
+          <div class="shop-results">
+
+            <div class="shop-toolbar">
+              <button class="btn btn--outline btn--sm shop-toolbar__trigger" type="button" id="shop-open-filters" aria-controls="shop-rail" aria-expanded="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"/></svg>
+                Filters
+                <span class="shop-toolbar__badge" id="shop-filter-count" hidden>0</span>
+              </button>
+
+              <p class="shop-toolbar__count" id="shop-count" role="status" aria-live="polite">Showing 0 of 0 products</p>
+
+              <div class="shop-toolbar__tools">
+                <label class="field shop-sort">
+                  <span class="field__label sr-only">Sort products by</span>
+                  <select class="field__select" id="shop-sort">
+                    <option value="featured">Featured</option>
+                    <option value="price-asc">Price: low to high</option>
+                    <option value="price-desc">Price: high to low</option>
+                    <option value="rating">Top rated</option>
+                    <option value="newest">Newest</option>
+                  </select>
+                </label>
+
+                <div class="shop-view" role="group" aria-label="View mode">
+                  <button class="shop-view__btn is-active" type="button" data-view="grid" aria-pressed="true" title="Grid view">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+                    <span class="sr-only">Grid view</span>
+                  </button>
+                  <button class="shop-view__btn" type="button" data-view="list" aria-pressed="false" title="List view">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <span class="sr-only">List view</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="shop-chips" id="shop-chips" hidden></div>
+
+            <div class="shop-grid" id="shop-grid" aria-busy="false"></div>
+
+            <div class="shop-empty" id="shop-empty" hidden>
+              <div class="empty-state">
+                <div class="empty-state__icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="28" cy="28" r="16"/>
+                    <path d="M39.5 39.5 54 54"/>
+                    <path d="M22 28h12"/>
+                  </svg>
+                </div>
+                <h3>Nothing matches those filters</h3>
+                <p class="u-muted">Every facet is combined, so a narrow price range plus a rare colour can leave the shelf empty. Widen one of them, or start over.</p>
+                <button class="btn btn--primary" type="button" data-clear-all>Clear all filters</button>
+              </div>
+            </div>
+
+            <div class="shop-more" id="shop-more" hidden>
+              <button class="btn btn--outline" type="button" id="shop-load-more">
+                Load more
+                <span class="u-dim" id="shop-more-count">(0 left)</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         RECENTLY VIEWED
+         ================================================================== -->
+    <section class="section section--tight shop-recent" id="shop-recent" hidden aria-labelledby="shop-recent-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="shop-recent-title" data-reveal="up">Recently viewed</h2>
+          <p class="u-muted" data-reveal="up" data-reveal-delay="0.08">Where you left off last time you were here.</p>
+        </div>
+        <div class="shop-grid shop-grid--recent" id="shop-recent-grid"></div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         TRUST STRIP
+         ================================================================== -->
+    <section class="section section--tight shop-trust" aria-labelledby="shop-trust-title">
+      <span class="shop-trust__glow" aria-hidden="true" data-parallax="0.28"></span>
+      <div class="container">
+        <h2 class="sr-only" id="shop-trust-title">Why buy from NOVA</h2>
+        <div class="shop-trust__grid" data-stagger>
+
+          <article class="shop-trust__item" data-reveal="up">
+            <span class="shop-trust__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v10H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17.5" cy="18" r="1.8"/></svg>
+            </span>
+            <h3 class="shop-trust__head">Free shipping over $500</h3>
+            <p class="u-muted">Tracked, insured and carbon-offset delivery on every order above five hundred dollars.</p>
+          </article>
+
+          <article class="shop-trust__item" data-reveal="up">
+            <span class="shop-trust__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>
+            </span>
+            <h3 class="shop-trust__head">2-year warranty</h3>
+            <p class="u-muted">Parts and labour covered for twenty-four months, drivers and batteries included.</p>
+          </article>
+
+          <article class="shop-trust__item" data-reveal="up">
+            <span class="shop-trust__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 1 2.6 6.1"/><path d="M3 20v-5h5"/></svg>
+            </span>
+            <h3 class="shop-trust__head">30-day returns</h3>
+            <p class="u-muted">Listen at home for a month. If it is not the one, send it back for a full refund.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/SplitText.min.js"></script>
+  <script src="assets/vendor/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/motion.js"></script>
+  <script src="assets/js/page-shop.js"></script>
+</body>
+</html>

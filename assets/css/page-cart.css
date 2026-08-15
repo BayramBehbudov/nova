@@ -1,0 +1,906 @@
+/* NOVA — cart and checkout page.
+ * Only structures unique to this page live here; every class is prefixed `cart-`
+ * so it can never collide with another page. Shared components (.btn, .field,
+ * .radio-card, .qty, .chip, .progress, .empty-state, .trust) are owned by
+ * components.css and are never redefined below.
+ */
+
+/* ==========================================================================
+   01. PAGE HEAD AND STEP INDICATOR
+   ========================================================================== */
+
+.cart-head { padding-bottom: 0; }
+
+.cart-head__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: var(--s4) 0 var(--s3);
+}
+
+.cart-head__lead {
+  max-width: 56ch;
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+.cart-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3) var(--s5);
+  margin: var(--s6) 0 0;
+  padding: var(--s4) 0 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+  counter-reset: cart-step;
+}
+
+.cart-steps__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  color: var(--text-mute);
+  font-size: var(--fs-sm);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.cart-steps__item + .cart-steps__item::before {
+  content: "";
+  width: clamp(18px, 5vw, 56px);
+  height: 1px;
+  margin-right: var(--s2);
+  background: var(--line-strong);
+  transition: background var(--dur) var(--ease-out);
+}
+
+.cart-steps__dot {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-full);
+  background: var(--fill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  transition: background var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+
+.cart-steps__label {
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-size: var(--fs-eyebrow);
+}
+
+.cart-steps__item.is-active { color: var(--text); }
+
+.cart-steps__item.is-active .cart-steps__dot {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+  box-shadow: var(--glow-soft);
+}
+
+.cart-steps__item.is-done { color: var(--text-dim); }
+
+.cart-steps__item.is-done .cart-steps__dot {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+  color: var(--accent-hi);
+}
+
+.cart-steps__item.is-done + .cart-steps__item::before,
+.cart-steps__item.is-active + .cart-steps__item::before { background: var(--accent-line); }
+
+
+/* ==========================================================================
+   02. STEP CONTAINERS
+   ========================================================================== */
+
+.cart-step { display: none; }
+.cart-step.is-active { display: block; }
+
+.cart-section-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--tracking-snug);
+  margin: 0 0 var(--s6);
+}
+
+.cart-section-title:focus-visible,
+.cart-done__title:focus-visible { outline-offset: 6px; }
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: start;
+  gap: var(--s6);
+}
+
+.cart-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+  min-width: 0;
+}
+
+.cart-aside { min-width: 0; }
+
+.cart-panel {
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--elev);
+}
+
+.cart-panel[hidden],
+.cart-reco[hidden],
+.cart-alert[hidden],
+.cart-promo__form[hidden],
+.cart-promo__hints[hidden],
+.cart-promo__applied[hidden],
+.cart-promo__hint-label[hidden],
+.cart-summary__row[hidden] { display: none; }
+
+.cart-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  letter-spacing: var(--tracking-snug);
+  margin: 0 0 var(--s4);
+  padding: 0;
+}
+
+
+/* ==========================================================================
+   03. CART LINES
+   ========================================================================== */
+
+.cart-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.cart-lines--empty { display: block; }
+
+.cart-line {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--s4) var(--s5);
+  padding: var(--s4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--elev);
+  transition: border-color var(--dur) var(--ease-out), background var(--dur) var(--ease-out);
+}
+
+.cart-line:hover {
+  border-color: var(--line-strong);
+  background: var(--elev-2);
+}
+
+.cart-line__art {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--fill);
+  aspect-ratio: 1 / 1;
+}
+
+.cart-line__art > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cart-line__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  min-width: 0;
+}
+
+.cart-line__brand {
+  margin: 0;
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cart-line__name {
+  margin: 0;
+  font-size: var(--fs-h4);
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--lh-snug);
+}
+
+.cart-line__name a {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+
+.cart-line__name a:hover {
+  color: var(--accent-hi);
+  background-size: 100% 1px;
+}
+
+.cart-line__color {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: var(--s1) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.cart-line__swatch {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: var(--r-full);
+  border: 1px solid var(--line-strong);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35);
+}
+
+.cart-line__unit {
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.cart-line__acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s2);
+}
+
+.cart-line__act {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.cart-line__act:hover {
+  color: var(--accent-hi);
+  border-bottom-color: var(--accent-line);
+}
+
+.cart-line__act--danger:hover {
+  color: var(--danger);
+  border-bottom-color: var(--danger);
+}
+
+.cart-line__qty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.cart-line__stock {
+  margin: 0;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+
+.cart-line__total {
+  margin: 0;
+  min-width: 6.5ch;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--fs-h4);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ==========================================================================
+   04. FREE SHIPPING PROGRESS
+   ========================================================================== */
+
+.cart-free { display: grid; gap: var(--s3); }
+
+.cart-free__label {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+
+.cart-free__label strong {
+  color: var(--accent-hi);
+  font-family: var(--font-mono);
+}
+
+.cart-free__tick {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-right: var(--s1);
+  border-radius: var(--r-full);
+  background: var(--ok);
+  color: var(--ink);
+  font-size: 11px;
+  vertical-align: -3px;
+}
+
+.cart-free--done { border-color: rgba(74, 222, 128, .32); }
+.cart-free--done .cart-free__label { color: var(--text); }
+.cart-free--done .progress__bar { background: var(--ok); }
+
+.cart-free .progress__bar { width: 0; }
+
+
+/* ==========================================================================
+   05. PROMO CODE
+   ========================================================================== */
+
+/* The Apply button has to sit level with the input, and the error line has to
+   be able to appear without moving it. A flex row cannot do both: `.field` is
+   a column, so the error grew that column, and because the row aligned on its
+   bottom edge the input was lifted away from the button by the error's height
+   plus the field's own row gap — 27.8px for a one-line message, 47.6px for two.
+   A grid fixes it structurally. `.field` is flattened with `display: contents`
+   so its label, control and error become items of this grid directly, and the
+   error is given a full-width row of its own underneath. The input and the
+   button then share row 2 and stay level whatever the error does; a message
+   that wraps simply makes its own row taller. An empty error is `display: none`
+   (components.css), so it generates no grid item and leaves no gap behind. */
+.cart-promo__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: var(--s3);
+  row-gap: var(--s2);
+}
+
+.cart-promo__form .field { display: contents; }
+
+.cart-promo__form .field__label,
+.cart-promo__form .field__control { grid-column: 1; }
+
+.cart-promo__form .field__error { grid-column: 1 / -1; }
+
+.cart-promo__form .btn {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+/* `align-items: end` lines the Apply button up with the bottom of the input,
+   so the two only share a centre line when they are the same height. Both
+   declare the design system's 46px control height, but `.field__input`
+   overshoots it by ~4.75px because it inherits the body line-height. Pin it
+   back to 46px here; the input centres its own text, so nothing shifts. */
+.cart-promo__form .field__input {
+  height: 46px;
+  padding-block: 0;
+}
+
+.cart-promo__applied { margin-bottom: var(--s3); }
+
+.cart-promo__hint-label {
+  margin: var(--s4) 0 var(--s2);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.cart-promo__hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.cart-promo__hint {
+  border: 0;
+  font: inherit;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+
+
+/* ==========================================================================
+   06. DELIVERY OPTIONS
+   ========================================================================== */
+
+.cart-ship__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+.cart-ship__cost {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  margin-top: var(--s2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  color: var(--text);
+}
+
+.cart-ship__was {
+  color: var(--text-mute);
+  font-size: var(--fs-sm);
+}
+
+.cart-ship__free {
+  color: var(--ok);
+  letter-spacing: var(--tracking-wide);
+  font-size: var(--fs-sm);
+}
+
+
+/* ==========================================================================
+   07. SUMMARY CARD
+   ========================================================================== */
+
+.cart-summary {
+  position: sticky;
+  top: calc(var(--header-h) + var(--s4));
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--elev-2), var(--elev));
+  box-shadow: var(--sh-1);
+}
+
+.cart-summary__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  letter-spacing: var(--tracking-snug);
+  margin: 0 0 var(--s4);
+}
+
+.cart-summary__rows {
+  display: grid;
+  gap: var(--s3);
+  margin: 0;
+}
+
+.cart-summary__rows--total { margin-top: var(--s1); }
+
+.cart-summary__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  font-size: var(--fs-sm);
+}
+
+.cart-summary__row dt {
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.cart-summary__row dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cart-summary__row--total {
+  font-size: var(--fs-h4);
+  align-items: center;
+}
+
+.cart-summary__row--total dt {
+  color: var(--text);
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-snug);
+}
+
+.cart-summary__row--total dd {
+  color: var(--accent-hi);
+  font-size: var(--fs-h3);
+}
+
+.cart-summary__ship {
+  margin: var(--s3) 0 0;
+  font-size: var(--fs-xs);
+}
+
+.cart-summary__actions {
+  display: grid;
+  gap: var(--s2);
+  margin-top: var(--s5);
+}
+
+.cart-summary .trust { margin-top: var(--s5); }
+
+
+/* ==========================================================================
+   08. CHECKOUT FORM
+   ========================================================================== */
+
+.cart-alert {
+  margin: 0 0 var(--s4);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--danger);
+  border-radius: var(--r-md);
+  background: var(--danger-soft);
+  color: var(--text);
+  font-size: var(--fs-sm);
+}
+
+.cart-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+}
+
+.cart-form__block {
+  margin: 0;
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--elev);
+}
+
+.cart-form__block > .cart-panel__title {
+  float: none;
+  margin-bottom: var(--s4);
+}
+
+.cart-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s4);
+}
+
+.cart-form__full { grid-column: 1 / -1; }
+
+.cart-form__terms { margin-top: var(--s4); }
+
+.cart-pay__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s3);
+}
+
+.cart-pay__note {
+  margin: var(--s4) 0 0;
+  padding: var(--s3) var(--s4);
+  border-left: 2px solid var(--accent-line);
+  background: var(--accent-soft);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+}
+
+.cart-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+
+
+/* ==========================================================================
+   09. MOBILE ORDER RECAP
+   ========================================================================== */
+
+.cart-recap__toggle { display: none; }
+
+.cart-recap__amount {
+  font-family: var(--font-mono);
+  color: var(--accent-hi);
+}
+
+
+/* ==========================================================================
+   10. CONFIRMATION
+   ========================================================================== */
+
+.cart-done {
+  max-width: 860px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.cart-done__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 120px;
+  margin-bottom: var(--s4);
+}
+
+.cart-done__burst {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.cart-done__spark {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+}
+
+.cart-done__spark--alt {
+  width: 6px;
+  height: 16px;
+  border-radius: var(--r-xs);
+  background: var(--accent-2);
+}
+
+.cart-done__badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--ink);
+  box-shadow: var(--glow);
+}
+
+.cart-done__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-snug);
+  margin: 0 0 var(--s3);
+}
+
+.cart-done__lead {
+  margin: 0 auto var(--s6);
+  max-width: 54ch;
+  color: var(--text-dim);
+  line-height: var(--lh-body);
+}
+
+.cart-done__lead strong { color: var(--text); }
+
+.cart-done__meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s4);
+  padding: var(--s5);
+  margin-bottom: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--elev);
+  text-align: left;
+}
+
+.cart-done__meta-item dt {
+  margin: 0 0 var(--s1);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.cart-done__meta-item dd {
+  margin: 0;
+  font-size: var(--fs-body);
+  color: var(--text);
+}
+
+.cart-done__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s4);
+  text-align: left;
+}
+
+.cart-done__card {
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--elev);
+}
+
+.cart-done__items {
+  display: grid;
+  gap: var(--s3);
+  margin: 0 0 var(--s4);
+  padding: 0;
+  list-style: none;
+}
+
+.cart-done__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: var(--s3);
+  font-size: var(--fs-sm);
+}
+
+/* Tabular figures keep the quantity column flush across rows: each
+   .cart-done__item is its own grid, so a proportional "1" would sit ~3px
+   off the "3" above it. Matches .cart-done__item-total alongside it. */
+.cart-done__item-qty {
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-done__item-total {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cart-done__addr {
+  margin: 0 0 var(--s4);
+  font-style: normal;
+  line-height: var(--lh-body);
+  color: var(--text-dim);
+}
+
+.cart-done__addr strong { color: var(--text); }
+
+.cart-done__pay { margin: 0 0 var(--s4); }
+
+.cart-done__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s3);
+  margin-top: var(--s6);
+}
+
+
+/* ==========================================================================
+   11. RECOMMENDATIONS
+   ========================================================================== */
+
+.cart-reco {
+  margin-top: var(--s9);
+  padding-top: var(--s7);
+  border-top: 1px solid var(--line);
+}
+
+
+/* ==========================================================================
+   12. RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .cart-layout { grid-template-columns: minmax(0, 1fr) 330px; }
+  .cart-line { grid-template-columns: 88px minmax(0, 1fr) auto auto; }
+}
+
+@media (max-width: 999px) {
+  .cart-layout { grid-template-columns: minmax(0, 1fr); }
+
+  .cart-summary {
+    position: static;
+    top: auto;
+  }
+
+  .cart-recap {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--elev);
+    overflow: hidden;
+  }
+
+  .cart-recap .cart-summary {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .cart-recap.is-collapsed .cart-summary { display: none; }
+
+  .cart-recap__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+    width: 100%;
+    padding: var(--s4) var(--s5);
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-snug);
+    cursor: pointer;
+  }
+
+  .cart-recap__toggle::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: none;
+    border-right: 1.5px solid var(--text-dim);
+    border-bottom: 1.5px solid var(--text-dim);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .cart-recap.is-collapsed .cart-recap__toggle::after {
+    transform: rotate(-135deg) translate(-2px, -2px);
+  }
+
+  .cart-done__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+  .cart-line {
+    grid-template-columns: 80px minmax(0, 1fr);
+    grid-template-areas:
+      "art body"
+      "qty total";
+    row-gap: var(--s4);
+  }
+
+  .cart-line__art { grid-area: art; }
+  .cart-line__body { grid-area: body; }
+
+  .cart-line__qty {
+    grid-area: qty;
+    align-items: flex-start;
+  }
+
+  .cart-line__total {
+    grid-area: total;
+    align-self: center;
+  }
+
+  .cart-form__grid,
+  .cart-pay__list,
+  .cart-ship__list,
+  .cart-done__grid { grid-template-columns: minmax(0, 1fr); }
+
+  .cart-form__actions .btn { flex: 1 1 100%; }
+}
+
+@media (max-width: 520px) {
+  .cart-steps { gap: var(--s2) var(--s3); }
+  .cart-steps__item + .cart-steps__item::before { width: 14px; margin-right: 0; }
+  .cart-steps__label { font-size: 10px; }
+  .cart-steps__dot { width: 26px; height: 26px; }
+
+  .cart-panel,
+  .cart-summary,
+  .cart-form__block,
+  .cart-done__card,
+  .cart-done__meta { padding: var(--s4); }
+
+  .cart-line { padding: var(--s3); }
+  .cart-done__meta { grid-template-columns: minmax(0, 1fr); }
+
+  /* One column: label, input, error, then a full-width button, in that order.
+     The extra 4px keeps the button the same distance below the field as it sat
+     when this row was a wrapping flex line. */
+  .cart-promo__form { grid-template-columns: minmax(0, 1fr); }
+
+  .cart-promo__form .btn {
+    grid-row: auto;
+    grid-column: 1;
+    width: 100%;
+    margin-top: var(--s1);
+  }
+}

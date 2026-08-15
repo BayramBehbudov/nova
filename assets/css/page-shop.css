@@ -1,0 +1,857 @@
+/* ==========================================================================
+   NOVA — page-shop.css
+   Structures unique to the shop / catalogue page. Every selector is prefixed
+   `shop-` so it can never collide with another page. Shared primitives
+   (.btn .field .chip .empty-state .breadcrumbs .container .section …) are
+   owned by components.css and are never redefined here.
+   --------------------------------------------------------------------------
+   01. Banner
+   02. Catalogue layout
+   03. Filter rail (desktop sticky / mobile slide-over)
+   04. Facet controls: options, price range, colour swatches
+   05. Toolbar
+   06. Active filter chips
+   07. Product grid (grid + list view)
+   08. Empty state / load more
+   09. Recently viewed
+   10. Trust strip
+   11. Reduced motion
+   ========================================================================== */
+
+
+/* ==========================================================================
+   01. BANNER
+   ========================================================================== */
+
+.shop-banner {
+  position: relative;
+  isolation: isolate;
+  padding-block: calc(var(--header-h) + var(--s8)) var(--s7);
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.shop-banner__field {
+  position: absolute;
+  inset: -20% -10% 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.shop-banner__orb {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: .55;
+}
+
+.shop-banner__orb--a {
+  inset-block-start: -14%;
+  inset-inline-start: -6%;
+  width: min(46vw, 620px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 40% 40%, rgba(233, 165, 75, .5), transparent 68%);
+}
+
+.shop-banner__orb--b {
+  inset-block-start: 6%;
+  inset-inline-end: -8%;
+  width: min(40vw, 540px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 55% 45%, rgba(124, 92, 255, .42), transparent 66%);
+}
+
+.shop-banner__rule {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
+}
+
+/* The crumb tail is rewritten as a whole; `contents` keeps its children as
+   direct flex items of .breadcrumbs so the shared gap still applies. */
+.shop-crumb { display: contents; }
+
+.shop-banner__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.shop-banner__title {
+  font-size: var(--fs-h1);
+  max-width: 18ch;
+}
+
+.shop-banner__sub {
+  max-width: 56ch;
+  font-size: var(--fs-body);
+}
+
+.shop-banner__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s2);
+  margin-block-start: var(--s2);
+  font-size: var(--fs-sm);
+}
+
+.shop-banner__num {
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ==========================================================================
+   02. CATALOGUE LAYOUT
+   ========================================================================== */
+
+.shop-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s6);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .shop-layout {
+    grid-template-columns: 272px minmax(0, 1fr);
+    gap: var(--s7);
+  }
+}
+
+@media (min-width: 1440px) {
+  .shop-layout { grid-template-columns: 300px minmax(0, 1fr); }
+}
+
+.shop-results { min-width: 0; }
+
+
+/* ==========================================================================
+   03. FILTER RAIL
+   Under 1024px the rail is a left slide-over panel driven by `.is-open`.
+   `visibility` keeps the closed panel out of the tab order without `inert`.
+   ========================================================================== */
+
+.shop-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-drawer) - 1);
+  background: rgba(4, 4, 7, .68);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.shop-scrim.is-open { opacity: 1; }
+
+.shop-rail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  box-shadow: var(--sh-1);
+}
+
+.shop-rail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s5) var(--s5) var(--s4);
+  border-bottom: 1px solid var(--line);
+}
+
+.shop-rail__heading {
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.shop-rail__close {
+  display: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-full);
+  color: var(--text-dim);
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-rail__close:hover {
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: var(--fill-hover);
+}
+
+.shop-rail__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s5);
+  padding: var(--s5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.shop-rail__clear { margin-block-start: var(--s1); }
+
+.shop-rail__clear[disabled] {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+/* Only the slide-over needs a sticky "apply" footer. */
+.shop-rail__foot { display: none; }
+
+@media (min-width: 1024px) {
+  .shop-rail {
+    position: sticky;
+    top: calc(var(--header-h) + var(--s5));
+    max-height: calc(100vh - var(--header-h) - var(--s7));
+  }
+}
+
+@media (max-width: 1023px) {
+  .shop-rail {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--z-drawer);
+    width: min(360px, 90vw);
+    max-width: 100%;
+    border-radius: 0 var(--r-lg) var(--r-lg) 0;
+    border-inline-start: 0;
+    transform: translateX(-101%);
+    visibility: hidden;
+    transition:
+      transform var(--dur) var(--ease-out),
+      visibility 0s linear var(--dur);
+  }
+
+  .shop-rail.is-open {
+    transform: none;
+    visibility: visible;
+    transition:
+      transform var(--dur) var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  .shop-rail__close { display: grid; }
+  .shop-rail__body { flex: 1 1 auto; }
+
+  .shop-rail__foot {
+    display: block;
+    padding: var(--s4) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+  }
+}
+
+
+/* ==========================================================================
+   04. FACET CONTROLS
+   ========================================================================== */
+
+.shop-facet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.shop-facet + .shop-facet {
+  padding-block-start: var(--s5);
+  border-top: 1px solid var(--line);
+}
+
+.shop-facet__title {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+
+.shop-facet__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+.shop-search .field__input { width: 100%; }
+
+/* --- Checkbox / radio option row -------------------------------------- */
+
+.shop-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s2);
+  margin-inline: calc(var(--s2) * -1);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-opt:hover {
+  color: var(--text);
+  background: var(--fill);
+}
+
+.shop-opt__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.shop-opt__box {
+  position: relative;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-xs);
+  background: var(--fill);
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-opt__box--radio { border-radius: 50%; }
+
+.shop-opt__box::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-start: 6px;
+  width: 4px;
+  height: 9px;
+  border: solid var(--ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(.4);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.shop-opt__box--radio::after {
+  inset: 4px;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  transform: scale(.3);
+}
+
+.shop-opt__input:checked + .shop-opt__box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.shop-opt__input:checked + .shop-opt__box::after {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
+}
+
+.shop-opt__input:checked + .shop-opt__box--radio::after {
+  transform: scale(1);
+}
+
+.shop-opt__input:focus-visible + .shop-opt__box {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.shop-opt__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.shop-opt__count {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.shop-opt.is-empty { opacity: .5; }
+
+/* --- Dual-handle price range ------------------------------------------ */
+
+.shop-range__label {
+  font-size: var(--fs-sm);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.shop-range {
+  position: relative;
+  height: 30px;
+  margin-inline: 9px;
+}
+
+.shop-range__track,
+.shop-range__fill {
+  position: absolute;
+  inset-block-start: 50%;
+  height: 3px;
+  border-radius: var(--r-full);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.shop-range__track {
+  inset-inline: -9px;
+  background: var(--elev-2);
+}
+
+.shop-range__fill {
+  inset-inline-start: 0;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hi));
+}
+
+.shop-range__input {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: -9px;
+  width: calc(100% + 18px);
+  height: 30px;
+  margin: 0;
+  background: none;
+  border: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+.shop-range__input::-webkit-slider-runnable-track {
+  height: 30px;
+  background: none;
+  border: 0;
+}
+
+.shop-range__input::-moz-range-track {
+  height: 30px;
+  background: none;
+  border: 0;
+}
+
+.shop-range__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-block-start: 6px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--glow-soft);
+  cursor: grab;
+  pointer-events: auto;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.shop-range__input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--glow-soft);
+  cursor: grab;
+  pointer-events: auto;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.shop-range__input:hover::-webkit-slider-thumb { transform: scale(1.14); }
+.shop-range__input:hover::-moz-range-thumb { transform: scale(1.14); }
+.shop-range__input:active::-webkit-slider-thumb { cursor: grabbing; transform: scale(1.2); }
+.shop-range__input:active::-moz-range-thumb { cursor: grabbing; transform: scale(1.2); }
+
+.shop-range__input:focus-visible {
+  outline: none;
+}
+
+.shop-range__input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+.shop-range__input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+.shop-range__ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Colour swatches --------------------------------------------------- */
+
+.shop-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+}
+
+.shop-swatch {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .45);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.shop-swatch:hover { transform: translateY(-2px) scale(1.06); }
+
+.shop-swatch::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0;
+  transform: scale(.8);
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.shop-swatch[aria-pressed="true"]::after {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* ==========================================================================
+   05. TOOLBAR
+   ========================================================================== */
+
+.shop-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3) var(--s4);
+  padding-block-end: var(--s4);
+  margin-block-end: var(--s5);
+  border-bottom: 1px solid var(--line);
+}
+
+.shop-toolbar__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+@media (min-width: 1024px) {
+  .shop-toolbar__trigger { display: none; }
+}
+
+.shop-toolbar__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.shop-toolbar__count {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.shop-toolbar__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-inline-start: auto;
+}
+
+.shop-sort { min-width: 0; }
+.shop-sort .field__select { min-width: 178px; }
+
+.shop-view {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--fill);
+}
+
+.shop-view__btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 30px;
+  border-radius: var(--r-xs);
+  color: var(--text-mute);
+  transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+
+.shop-view__btn:hover { color: var(--text); }
+
+.shop-view__btn.is-active {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+
+/* ==========================================================================
+   06. ACTIVE FILTER CHIPS
+   ========================================================================== */
+
+.shop-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-block-end: var(--s5);
+}
+
+.shop-chips__label {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-inline-end: var(--s1);
+}
+
+.shop-chips__reset {
+  margin-inline-start: var(--s1);
+  font-size: var(--fs-xs);
+  color: var(--text-mute);
+  text-decoration: underline;
+  text-underline-offset: .22em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.shop-chips__reset:hover { color: var(--accent); }
+
+.shop-chip__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  flex: 0 0 auto;
+}
+
+
+/* ==========================================================================
+   07. PRODUCT GRID
+   ========================================================================== */
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--s5);
+  min-width: 0;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1200px) {
+  .shop-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.shop-grid > * { min-width: 0; }
+
+.shop-grid[aria-busy="true"] { pointer-events: none; }
+
+/* --- List view: one row per product, art pinned left ------------------- */
+
+.shop-grid.shop-grid--list {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s4);
+}
+
+@media (min-width: 560px) {
+  .shop-grid.shop-grid--list > .pcard {
+    display: grid;
+    grid-template-columns: minmax(170px, 32%) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  /* .pcard__media is 4/5 in card view; in a row it fills the track instead. */
+  .shop-grid.shop-grid--list > .pcard > .pcard__media {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 200px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .shop-grid.shop-grid--list > .pcard > .pcard__body {
+    justify-content: center;
+    padding-block: var(--s5);
+  }
+
+  /* .pcard__quick is absolutely positioned against the whole card; in a row it
+     stays over the artwork instead of straddling the copy. */
+  .shop-grid.shop-grid--list > .pcard > .pcard__quick {
+    right: auto;
+    width: calc(32% - var(--s6));
+    min-width: 140px;
+  }
+}
+
+/* Out-of-stock styling lives in components.css (.pcard.is-out) and is not
+   repeated here. */
+
+
+/* ==========================================================================
+   08. EMPTY STATE / LOAD MORE
+   ========================================================================== */
+
+.shop-empty {
+  padding-block: var(--s8);
+}
+
+.shop-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s3);
+  padding-block-start: var(--s7);
+}
+
+.shop-more .btn { min-width: 220px; justify-content: center; }
+
+
+/* ==========================================================================
+   09. RECENTLY VIEWED
+   ========================================================================== */
+
+.shop-recent {
+  border-top: 1px solid var(--line);
+}
+
+.shop-grid--recent {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+@media (min-width: 900px) {
+  .shop-grid--recent { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+
+/* ==========================================================================
+   10. TRUST STRIP
+   ========================================================================== */
+
+.shop-trust {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+}
+
+.shop-trust__glow {
+  position: absolute;
+  z-index: -1;
+  inset-block-start: -40%;
+  inset-inline-start: 50%;
+  width: min(90vw, 900px);
+  aspect-ratio: 2 / 1;
+  margin-inline-start: min(-45vw, -450px);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(233, 165, 75, .16), transparent 66%);
+  filter: blur(48px);
+  pointer-events: none;
+}
+
+.shop-trust__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s5);
+}
+
+@media (min-width: 760px) {
+  .shop-trust__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.shop-trust__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, var(--fill), transparent);
+  transition: border-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+
+.shop-trust__item:hover {
+  border-color: var(--accent-line);
+  transform: translateY(-3px);
+}
+
+.shop-trust__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--accent-line);
+  border-radius: var(--r-sm);
+  background: var(--accent-soft);
+  color: var(--accent-hi);
+}
+
+.shop-trust__head {
+  font-size: var(--fs-h4);
+  letter-spacing: var(--tracking-snug);
+}
+
+.shop-trust__item p {
+  font-size: var(--fs-sm);
+  max-width: 40ch;
+}
+
+
+/* ==========================================================================
+   11. REDUCED MOTION
+   Panels and cards still change state; they simply stop travelling.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .shop-swatch:hover,
+  .shop-trust__item:hover { transform: none; }
+
+  .shop-rail,
+  .shop-scrim { transition: none; }
+}
